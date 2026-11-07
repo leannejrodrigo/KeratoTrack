@@ -1,0 +1,42 @@
+# A safety net for rule 7 in docs/safety-boundaries.md. Not a guarantee:
+# always review staged files before committing. The staged-file guard
+# (scripts/repo_guard.py, see docs/development.md) adds a second check.
+
+# --- Health and research data ---------------------------------------------
+# Research datasets, patient identifiers and split assignments live OUTSIDE
+# this repository (see KERATOTRACK_DATA_DIR in .env.example). This entry is a
+# second line of defence in case data is ever copied in here by mistake.
+research/data/
+
+# Local databases could contain real health records
+*.db
+*.sqlite
+*.sqlite3
+
+# --- Secrets and local settings -------------------------------------------
+.env
+.env.*
+# The example file holds variable NAMES only, never values, so it is shared
+!.env.example
+
+# --- Companion (Node / Vite) ----------------------------------------------
+node_modules/
+dist/
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+npm-debug.log*
+
+# --- Research (Python) ----------------------------------------------------
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# --- Operating system files -----------------------------------------------
+Thumbs.db
+desktop.ini
+.DS_Store

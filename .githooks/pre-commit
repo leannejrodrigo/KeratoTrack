@@ -1,0 +1,18 @@
+#!/bin/sh
+# KeratoTrack pre-commit hook: runs the repository guard on staged files.
+# Enable once per clone with:  git config core.hooksPath .githooks
+# See docs/development.md.
+
+# Locate the guard relative to this hook file, so it works from any folder.
+GUARD="$(dirname "$0")/../scripts/repo_guard.py"
+
+# Find a working Python. On Windows, "python3" may be a Store placeholder that
+# does not run, so each candidate is actually tested.
+for candidate in python3 python py; do
+    if command -v "$candidate" >/dev/null 2>&1 && "$candidate" -c "import sys" >/dev/null 2>&1; then
+        exec "$candidate" "$GUARD" --staged
+    fi
+done
+
+echo "repo-guard: no working Python found; commit blocked for safety." >&2
+exit 1

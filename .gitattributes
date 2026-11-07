@@ -1,0 +1,7 @@
+# Let Git normalise line endings for text files (LF in the repository).
+* text=auto
+
+# Shell scripts and Git hooks must keep LF line endings even on Windows,
+# otherwise the shell can fail on the hidden carriage-return characters.
+.githooks/* text eol=lf
+*.sh text eol=lf
