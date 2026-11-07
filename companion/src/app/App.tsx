@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
+import { ComingSoonPage } from "../features/ComingSoonPage";
 import { MeasurementsPage } from "../features/measurements/MeasurementsPage";
 import { OverviewPage } from "../features/overview/OverviewPage";
 import { SyntheticBanner } from "../ui/SyntheticBanner";
-import { VISIBLE_SECTIONS, sectionFromHash, type SectionId } from "./navigation";
+import { SECTIONS, sectionFromHash, type SectionId } from "./navigation";
 
 /**
  * Hash-based routing (#/my-eyes). A router library is not needed for two
@@ -20,7 +21,7 @@ export function App() {
   }, []);
 
   useEffect(() => {
-    const label = VISIBLE_SECTIONS.find((s) => s.id === section)?.label ?? "";
+    const label = SECTIONS.find((s) => s.id === section)?.label ?? "";
     document.title = `${label} · KeratoTrack (synthetic data)`;
     // On navigation (not first load), move focus to <main> so screen-reader
     // users hear the new page instead of staying on the nav link.
@@ -41,9 +42,12 @@ export function App() {
             <span>KeratoTrack</span>
           </div>
           <ul>
-            {VISIBLE_SECTIONS.map((s) => (
+            {SECTIONS.map((s) => (
               <li key={s.id}>
-                <a href={`#/${s.id}`} aria-current={s.id === section ? "page" : undefined}>{s.label}</a>
+                <a href={`#/${s.id}`} aria-current={s.id === section ? "page" : undefined} className={s.built ? undefined : "nav-soon"}>
+                  {s.label}
+                  {!s.built && <span className="soon-tag">Soon<span className="visually-hidden"> (not built yet)</span></span>}
+                </a>
               </li>
             ))}
           </ul>
@@ -52,6 +56,7 @@ export function App() {
         <main id="main" tabIndex={-1}>
           {section === "overview" && <OverviewPage onNavigate={navigate} />}
           {section === "my-eyes" && <MeasurementsPage />}
+          {SECTIONS.filter((s) => !s.built && s.id === section).map((s) => <ComingSoonPage key={s.id} section={s} />)}
         </main>
       </div>
     </div>

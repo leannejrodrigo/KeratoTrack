@@ -18,10 +18,14 @@ function setup() {
 }
 
 describe("Companion app", () => {
-  it("shows only built sections and the persistent synthetic banner", () => {
-    setup();
+  it("shows all five sections, marks unbuilt ones, and keeps the synthetic banner", async () => {
+    const { user } = setup();
     const nav = screen.getByRole("navigation", { name: "Main" });
-    expect(within(nav).getAllByRole("link").map((a) => a.textContent)).toEqual(["Overview", "My Eyes"]);
+    expect(within(nav).getAllByRole("link").map((a) => a.textContent?.replace(/Soon.*$/, ""))).toEqual(["Overview", "My Eyes", "Appointments", "Records", "Library"]);
+    expect(within(nav).getByRole("link", { name: /Library.*not built yet/ })).toBeInTheDocument();
+    await user.click(within(nav).getByRole("link", { name: /Appointments/ }));
+    expect(await screen.findByRole("heading", { name: "Appointments is not built yet" })).toBeInTheDocument();
+    expect(screen.queryByRole("button")).not.toBeInTheDocument() ;
     expect(screen.getByRole("note", { name: "Synthetic data notice" })).toHaveTextContent("SYNTHETIC DATA");
   });
 

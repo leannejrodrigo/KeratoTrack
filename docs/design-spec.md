@@ -92,8 +92,12 @@ token contrast test.
 | `viewer-surround` | `#3A3D42` | Image well only |
 | `synthetic` | `#B07D2B` | Outline of the SYNTHETIC label |
 
-**Data series.** Right eye (OD): teal, circle markers. Left eye (OS): navy,
-square markers. Research series: navy, teal, blue, ochre `#B07D2B`, plum
+**Data series.** Right eye (OD): teal with a solid connector line. Left eye
+(OS): navy with a dashed connector line. When both eyes are shown, each also
+carries a direct "OD" or "OS" text label. Marker **shape** identifies the
+device: one shape per device, in order of first appearance, and a hollow ring
+for "Device not recorded". (Changed 2026-11-08: shape cannot encode both eye
+and device, and the device rule in 5.3 needs it.) Research series: navy, teal, blue, ochre `#B07D2B`, plum
 `#7A4E8C`, slate, each with a distinct marker shape; at most six per chart.
 
 Tokens are named by role, not hue, so a future dark theme supplies new values
@@ -133,7 +137,10 @@ grid with sidebar, main area and detail panel.
 Overview · My Eyes (Timeline, Measurements) · Appointments (including a
 personal list of questions) · Records (Treatments, Reports) · Library. Bottom
 tabs on mobile, navigation rail on tablet, sidebar on laptop and desktop.
-Sections appear only once they are built.
+All five sections are shown from the start. A section that is not built yet
+is marked "Soon" and opens a short page saying what it will contain, with no
+placeholder features. (Changed 2026-11-08; previously sections appeared only
+once built.)
 
 ### 5.2 Pages
 
@@ -155,8 +162,9 @@ Sections appear only once they are built.
   interpretation; footer "Personal record, not a clinical document".
 - **Library:** searchable articles with sources, a last-reviewed date and
   "General information, not personal advice"; linked glossary.
-- **Source badges:** "From clinic report (uploaded by you)" and "Entered by
-  you", using icon and text as well as colour.
+- **Source badges:** "From clinic report (entered by you)" and "Entered by
+  you", using icon and text as well as colour. "(uploaded by you)" is used
+  only once uploading a report exists.
 
 ### 5.3 Clinical measurement charts
 
@@ -359,6 +367,10 @@ is deferred.
 | Separation | Separate apps and storage; no data path between Companion and Research | Same, separate infrastructure |
 | Repository protection | `.gitignore`, data outside the repository, staged-file guard hook, secret scanning, notebook output stripping, review before every commit | Same plus CI scanning and protected branches |
 
+**Until the gate below is passed,** values typed into the Companion's forms
+are stored as synthetic practice data: `SYN-` identifiers, `synthetic: true`
+and the SYNTHETIC label, and the storage layer refuses anything else.
+
 **Gate:** no real health data until encryption, backup, restore and deletion
 are implemented and tested, and the Safari eviction question is resolved.
 
@@ -407,3 +419,4 @@ review).
 |---|---|
 | 2026-11-07 | v4 approved as the provisional design baseline |
 | 2026-11-07 | Recorded later decisions: data directory `C:\dev\KeratoTrack-data\` via `KERATOTRACK_DATA_DIR`; personal question list in Appointments; MIT licence for original code only; "independent reviewer, to be identified"; the name "Research Laboratory" |
+| 2026-11-08 | Decisions after the first implementation: all five sections shown with "Soon" pages; marker shape encodes device and eye uses colour, line style and text label; source badge "From clinic report (entered by you)"; form entries stored as synthetic practice data until the real-data gate |
