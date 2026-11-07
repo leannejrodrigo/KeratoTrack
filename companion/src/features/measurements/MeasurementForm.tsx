@@ -23,11 +23,13 @@ const USER_SOURCES: Source[] = ["clinicReport", "enteredByUser"];
 interface Props {
   todayIso: string;
   initial?: Partial<MeasurementDraft>;
+  /** "edit" changes the title and button; the record's identity is handled by the caller. */
+  mode?: "add" | "edit";
   onSave: (entry: ValidEntry) => Promise<string | null>;
   onCancel: () => void;
 }
 
-export function MeasurementForm({ todayIso, initial, onSave, onCancel }: Props) {
+export function MeasurementForm({ todayIso, initial, mode = "add", onSave, onCancel }: Props) {
   const uid = useId();
   const fid = (f: DraftField) => `${uid}-${f}`;
   const [draft, setDraft] = useState<MeasurementDraft>({ ...EMPTY_DRAFT, ...initial });
@@ -68,7 +70,7 @@ export function MeasurementForm({ todayIso, initial, onSave, onCancel }: Props) 
 
   return (
     <form className="panel form" onSubmit={submit} noValidate aria-labelledby={`${uid}-title`}>
-      <h2 id={`${uid}-title`}>Add a practice measurement</h2>
+      <h2 id={`${uid}-title`}>{mode === "edit" ? "Edit practice measurement" : "Add a practice measurement"}</h2>
       <p className="hint">This version stores synthetic practice data only. Use invented values, not your real measurements.</p>
       <ErrorSummary errors={summary} />
 
@@ -106,9 +108,17 @@ export function MeasurementForm({ todayIso, initial, onSave, onCancel }: Props) 
         </Field>
       )}
 
-      <RadioGroup legend="Where did this value come from?" name="source" error={errors.source} idBase={fid("source")}
-        options={USER_SOURCES.map((s) => ({ value: s, label: SOURCE_LABEL[s] }))}
-        value={draft.source} onChange={(v) => set("source", v as Source)} />
+      {/* Generated demo records keep their source: relabelling them "entered by you" would misstate where they came from. */}
+      {initial?.source === "syntheticDemo" ? (
+        <div className="field">
+          <p className="label">Where did this value come from?</p>
+          <p>{SOURCE_LABEL.syntheticDemo}. The source of generated demo data cannot be changed.</p>
+        </div>
+      ) : (
+        <RadioGroup legend="Where did this value come from?" name="source" error={errors.source} idBase={fid("source")}
+          options={USER_SOURCES.map((s) => ({ value: s, label: SOURCE_LABEL[s] }))}
+          value={draft.source} onChange={(v) => set("source", v as Source)} />
+      )}
 
       <Field id={fid("note")} label="Note (optional)" hint="For example, who wrote it on the report." error={errors.note}>
         <textarea id={fid("note")} rows={2} value={draft.note} onChange={(e) => set("note", e.target.value)}
@@ -117,7 +127,7 @@ export function MeasurementForm({ todayIso, initial, onSave, onCancel }: Props) 
 
       {saveError && <p className="inline-error" role="alert">The measurement could not be saved: {saveError}</p>}
       <div className="actions">
-        <button type="submit" className="btn btn-primary" disabled={saving}>Save measurement</button>
+        <button type="submit" className="btn btn-primary" disabled={saving}>{mode === "edit" ? "Save changes" : "Save measurement"}</button>
         <button type="button" className="btn btn-secondary" onClick={onCancel}>Cancel</button>
       </div>
     </form>

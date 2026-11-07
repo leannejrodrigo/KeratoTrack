@@ -198,6 +198,7 @@ textarea { min-height: 80px; }
 .data-table th { text-align: left; font-weight: 600; color: var(--text-secondary); background: var(--surface-subtle); padding: var(--space-3); border-bottom: 1px solid var(--border-control); white-space: nowrap; }
 .data-table td { padding: var(--space-3); border-bottom: 1px solid var(--border); vertical-align: top; }
 .data-table .num { text-align: right; }
+.row-actions { white-space: nowrap; }
 .note { font-size: var(--type-caption); color: var(--text-secondary); margin-top: var(--space-1); }
 
 /* ---- Chart -------------------------------------------------------------- */

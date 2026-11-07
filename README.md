@@ -26,7 +26,7 @@ records.** See [`docs/safety-boundaries.md`](docs/safety-boundaries.md).
 
 ## Current status
 
-**Companion MVP (C1–C4, except editing a measurement) and research integrity infrastructure implemented,
+**Companion MVP (C1–C4) and research integrity infrastructure implemented,
 awaiting review** (2026-11-07).
 
 - **Patient Companion:** a local-first web app with Overview and My Eyes.
@@ -88,7 +88,7 @@ been reviewed and approved.
 | **Patient Companion** | | |
 | C1 | Application foundation: design tokens, navigation, core components, automated checks | Implemented, awaiting review |
 | C2 | Data model and storage: validated schema, local storage, separate synthetic demo storage | Implemented, awaiting review |
-| C3 | Measurement management: add, edit, delete, validation | Partly done: add, delete with undo, validation. Edit not built yet |
+| C3 | Measurement management: add, edit, delete, validation | Implemented, awaiting review |
 | C4 | Measurement charts and tables, with provenance (synthetic data). **MVP checkpoint** | Implemented, awaiting review |
 | C5 | Appointments (including a personal question list) and treatment records | Not started |
 | C6 | Educational library and glossary | Not started |

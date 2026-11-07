@@ -9,7 +9,7 @@
  * Messages follow GOV.UK error-message style: say what is wrong and how to fix
  * it, in plain words. The same text is used inline and in the error summary.
  */
-import { EYES, MEASUREMENT_KINDS, SOURCES, isRealCalendarDate, type Eye, type MeasurementKind, type Source } from "./measurement";
+import { EYES, MEASUREMENT_KINDS, SOURCES, isRealCalendarDate, type Eye, type Measurement, type MeasurementKind, type Source } from "./measurement";
 
 export interface MeasurementDraft {
   kind: MeasurementKind | "";
@@ -111,5 +111,24 @@ export function validateDraft(
       source: draft.source as Source,
       ...(note ? { note } : {}),
     },
+  };
+}
+
+/**
+ * The reverse of validateDraft: fill the form from a stored record, for
+ * editing. The value is written at the kind's resolution ("48.0", not "48"),
+ * so saving an unedited form reproduces exactly the stored value.
+ */
+export function measurementToDraft(m: Measurement): MeasurementDraft {
+  const decimals = Math.max(0, -Math.floor(Math.log10(MEASUREMENT_KINDS[m.kind].resolution)));
+  return {
+    kind: m.kind,
+    eye: m.eye,
+    date: m.date,
+    value: m.value.toFixed(decimals),
+    deviceChoice: m.device === null ? "notRecorded" : "named",
+    deviceName: m.device ?? "",
+    source: m.source,
+    note: m.note ?? "",
   };
 }

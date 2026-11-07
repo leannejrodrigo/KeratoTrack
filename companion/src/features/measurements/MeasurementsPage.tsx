@@ -6,7 +6,8 @@ import { localTodayIso } from "../../domain/today";
 import { Toast, type ToastState } from "../../ui/Toast";
 import { MeasurementForm } from "./MeasurementForm";
 import { MeasurementTable } from "./MeasurementTable";
-import { newPracticeMeasurement } from "./newMeasurement";
+import { applyEdit, newPracticeMeasurement } from "./newMeasurement";
+import { measurementToDraft } from "../../domain/entryValidation";
 
 type EyeFilter = Eye | "both";
 const EYE_FILTERS: { value: EyeFilter; label: string }[] = [
@@ -34,6 +35,7 @@ export function MeasurementsPage() {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [adding, setAdding] = useState(false);
+  const [editing, setEditing] = useState<Measurement | null>(null);
   const [toast, setToast] = useState<ToastState | null>(null);
   const [announcement, setAnnouncement] = useState("");
   const [lastEntry, setLastEntry] = useState<{ deviceChoice: "named" | "notRecorded"; deviceName: string; source: Measurement["source"] } | null>(null);
@@ -57,6 +59,32 @@ export function MeasurementsPage() {
       // Undo re-stores the identical record (same id and createdAt).
       onAction: () => void mutate((r) => r.put(m)),
     });
+  }
+
+  if (editing) {
+    const original = editing;
+    return (
+      <MeasurementForm
+        mode="edit"
+        todayIso={localTodayIso()}
+        initial={measurementToDraft(original)}
+        onCancel={() => setEditing(null)}
+        onSave={async (entry) => {
+          const err = await mutate((r) => r.put(applyEdit(original, entry)));
+          if (!err) {
+            setEditing(null);
+            setKind(entry.kind);
+            setToast({
+              message: `Updated ${MEASUREMENT_KINDS[entry.kind].label} for ${EYE_LABEL[entry.eye].replace(/^\w/, (c) => c.toLowerCase())}, ${formatDate(entry.date)}.`,
+              actionLabel: "Undo",
+              // Undo writes back the exact previous record, including its old updatedAt.
+              onAction: () => void mutate((r) => r.put(original)),
+            });
+          }
+          return err;
+        }}
+      />
+    );
   }
 
   if (adding) {
@@ -126,7 +154,7 @@ export function MeasurementsPage() {
       <div className="panel">
         {loading ? <p className="muted">Loading…</p> : view === "chart"
           ? <MeasurementChart measurements={visible} kind={kind} synthetic={synthetic} />
-          : <MeasurementTable measurements={visible} kind={kind} onDelete={remove} />}
+          : <MeasurementTable measurements={visible} kind={kind} onDelete={remove} onEdit={setEditing} />}
       </div>
       <Toast toast={toast} onClose={() => setToast(null)} />
     </section>
