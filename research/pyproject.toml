@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "keratotrack-research"
+version = "0.1.0"
+description = "KeratoTrack Research Laboratory: integrity infrastructure for keratoconus ML experiments. Experimental; no clinical validity."
+license = "MIT"
+requires-python = ">=3.10"
+# Lower bounds are the versions this was developed and tested with.
+dependencies = [
+  "numpy>=2.5",
+  "pandas>=3.0",
+  "scikit-learn>=1.9",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=9.1"]
+
+[project.scripts]
+keratotrack-research = "keratotrack_research.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

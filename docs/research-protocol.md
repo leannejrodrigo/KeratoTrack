@@ -208,8 +208,14 @@ Requirements:
 
 ### Planned integrity controls
 
-These controls are planned for phase R2 and will be described here in detail
-once they exist and have been tested.
+**Status (2026-11-07):** the tooling for these controls exists in
+`research/src/keratotrack_research/` and is tested on synthetic data only
+(`splits.py`, `evaluation.py`, `audit.py`). It has not been applied to any real
+dataset. The method is: validate identifiers (trimmed, case-folded comparison);
+assign whole patients with a two-stage `StratifiedGroupKFold`, stratified on a
+per-patient label (1 if any eye is labelled 1); record achieved label balance
+per split in the manifest; and refuse to freeze a split while the audit
+reports blockers.
 
 - **Frozen split with a separate manifest.** Patient-to-split assignments are
   stored outside the repository with the data. A committed manifest records only
@@ -348,3 +354,4 @@ research outputs must stay separate from the Companion
 | 2026-11-07 | Provisional first draft created during Phase 0 |
 | 2026-11-07 | Removed unverified preliminary dataset observations; findings to be recorded only after reproducible audit |
 | 2026-11-07 | Clarified training-only preprocessing and the role of validation data; added planned integrity controls and their limitations; data stored outside the repository; reviewer changed to "independent reviewer, to be identified" |
+| 2026-11-07 | Recorded that integrity tooling for section 7 exists and is tested on synthetic data only |

@@ -115,4 +115,6 @@ clinical tools and do not reach the Companion.
   would need security, legal and ethical review first.
 - Which research dataset to use, pending an audit.
 - Which legal or regulatory requirements would apply to any real-user release.
-- The project's open-source licence.
+
+The open-source licence has been decided: MIT for original code and
+documentation only ([ADR 0007](decisions/0007-mit-licence-scope.md)).

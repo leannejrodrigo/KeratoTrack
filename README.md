@@ -26,9 +26,21 @@ records.** See [`docs/safety-boundaries.md`](docs/safety-boundaries.md).
 
 ## Current status
 
-**Phase P0: foundations close-out.** This repository contains documentation,
-folder structure and repository safety checks only. There is no application
-code, no trained model and no dataset, and nothing has been deployed.
+**Companion MVP (C1–C4, except editing a measurement) and research integrity infrastructure implemented,
+awaiting review** (2026-11-07).
+
+- **Patient Companion:** a local-first web app with Overview and My Eyes.
+  It stores synthetic practice data only, in the browser, and charts it with
+  full provenance. JSON export and import and delete-all are already in place.
+- **Research Laboratory:** a Python package for synthetic datasets,
+  dataset audits, frozen patient-level splits with manifests, a guarded
+  test-set evaluator with a chained access log, missing-data mechanisms,
+  calibration metrics and static reports. **No real dataset has been used,
+  no model has been trained and there are no results.** The literature review
+  (R0) and dataset licence check and audit (R1) have not started.
+
+Nothing has been deployed. See [docs/development.md](docs/development.md) to
+run it.
 
 ## Documentation
 
@@ -42,11 +54,10 @@ code, no trained model and no dataset, and nothing has been deployed.
 
 ## Planned technologies
 
-These are the approved directions for the first milestones. **Nothing has been
-installed yet.** Each library is confirmed, with its reason recorded, when it is
-first installed.
+These are the approved directions. Each library is confirmed, with its reason
+recorded, when it is first installed.
 
-| Area | Approved direction |
+| Area | Direction (installed libraries are recorded in [ADR 0009](docs/decisions/0009-first-libraries.md)) |
 |---|---|
 | Companion: application | React, TypeScript and Vite |
 | Companion: storage | Local-first: data stays in the user's browser (IndexedDB), behind a storage interface. No backend server in the initial version |
@@ -73,21 +84,21 @@ been reviewed and approved.
 
 | Phase | Focus | Status |
 |---|---|---|
-| P0 | Foundations close-out: align documents, licence, repository protections | **In progress** |
+| P0 | Foundations close-out: align documents, licence, repository protections | Done, awaiting review |
 | **Patient Companion** | | |
-| C1 | Application foundation: design tokens, navigation, core components, automated checks | Not started |
-| C2 | Data model and storage: validated schema, local storage, separate synthetic demo storage | Not started |
-| C3 | Measurement management: add, edit, delete, validation | Not started |
-| C4 | Measurement charts and tables, with provenance (synthetic data). **MVP checkpoint** | Not started |
+| C1 | Application foundation: design tokens, navigation, core components, automated checks | Implemented, awaiting review |
+| C2 | Data model and storage: validated schema, local storage, separate synthetic demo storage | Implemented, awaiting review |
+| C3 | Measurement management: add, edit, delete, validation | Partly done: add, delete with undo, validation. Edit not built yet |
+| C4 | Measurement charts and tables, with provenance (synthetic data). **MVP checkpoint** | Implemented, awaiting review |
 | C5 | Appointments (including a personal question list) and treatment records | Not started |
 | C6 | Educational library and glossary | Not started |
-| C7 | Data management: JSON export and import, deletion | Not started |
+| C7 | Data management: JSON export and import, deletion | Partly done: export, import, delete-all |
 | C8 | Quality and accessibility testing | Not started |
 | **Research: decision stage** | | |
 | R0 | Systematic literature review: is the research question still open and worth pursuing? | Not started |
 | R1 | Dataset licence and provenance check, then a reproducible dataset audit: is the dataset suitable and permitted for this use? | Not started |
 | **Research: conditional on R0 and R1** | | |
-| R2 | Data preparation: identifier checks, frozen patient-level splits, leakage tests | Not started |
+| R2 | Data preparation: identifier checks, frozen patient-level splits, leakage tests | Tooling built and tested on synthetic data only; not applied to any real dataset |
 | R3 | Baseline experiments | Not started |
 | R4–R6 | Computer vision, multimodal and robustness experiments | Not started |
 | R7 | Calibration, uncertainty and reliability analysis | Not started |

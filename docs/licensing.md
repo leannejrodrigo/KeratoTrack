@@ -23,5 +23,14 @@ obtain each dataset from its original source and follow its terms.
 
 ## Third-party components currently included
 
-None. This section is updated whenever third-party material is added to the
-repository.
+No third-party files are committed to this repository. Third-party packages
+are installed by package managers and listed in `companion/package.json` and
+`research/pyproject.toml`; the reasons are in
+[ADR 0009](decisions/0009-first-libraries.md).
+
+| Component | Licence | Notes |
+|---|---|---|
+| Inter (via `@fontsource-variable/inter`) | SIL OFL 1.1 | Bundled into the Companion's build output. Any distributed build must include the OFL text, which ships in the package (`node_modules/@fontsource-variable/inter/LICENSE`) |
+| JetBrains Mono (via `@fontsource/jetbrains-mono`) | SIL OFL 1.1 | As above |
+
+This section is updated whenever third-party material is added.

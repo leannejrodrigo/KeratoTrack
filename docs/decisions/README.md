@@ -16,3 +16,4 @@ superseded.
 | [0006](0006-json-export-format.md) | JSON as the complete export and import format | Accepted |
 | [0007](0007-mit-licence-scope.md) | MIT licence for original code only | Accepted |
 | [0008](0008-repository-guard-hook.md) | Dependency-free staged-file guard as a Git hook | Accepted |
+| [0009](0009-first-libraries.md) | First libraries for the Companion and the research package | Accepted |

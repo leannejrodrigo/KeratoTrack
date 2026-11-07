@@ -8,9 +8,12 @@ This guide describes what exists **now**. It grows as each phase adds code.
 |---|---|---|
 | Git | 2.54 | Version control and the safety hook |
 | Python | 3.13 (any 3.10+ should work) | The repository guard and its tests (standard library only) |
-| Node.js | 22.23 | Not used yet. The Companion (phase C1) will need 20.19+ or 22.12+ |
+| Node.js | 22.23 | The Companion (Vite needs 20.19+ or 22.12+) |
+| npm | 10.9 | Companion dependencies |
 
-Nothing needs to be installed with `pip` or `npm` at this stage.
+The repository guard still needs nothing beyond the Python standard library.
+The Companion and the research package have their own dependencies, listed in
+[ADR 0009](decisions/0009-first-libraries.md).
 
 ## One-time setup after cloning
 
@@ -59,10 +62,44 @@ Always review `git diff --staged` before committing. A dedicated secret
 scanner (gitleaks) and notebook stripper (nbstripout) may be added later, after
 their installation is approved.
 
+## Patient Companion
+
+```sh
+cd companion
+npm install
+npm run dev          # http://localhost:5173
+npm test             # Vitest: unit, repository contract and integration tests
+npm run typecheck    # TypeScript strict mode
+npm run build
+```
+
+Design tokens live in `design-tokens/tokens.json` at the repository root. After
+editing them, run `npm run tokens` in `companion/`. A test fails if the
+generated `tokens.css` is out of date, and another checks every contrast pair
+listed in the tokens file.
+
+## Research
+
+Use a virtual environment so the research dependencies stay separate from your
+system Python:
+
+```sh
+cd research
+python -m venv .venv
+.venv\Scripts\activate      # Windows (PowerShell: .venv\Scripts\Activate.ps1)
+pip install -e ".[test]"
+python -m pytest
+```
+
+`KERATOTRACK_DATA_DIR` must be set (in `.env` or the environment) for any
+command that writes data. See [research/README.md](../research/README.md).
+
 ## Running the tests
 
 ```sh
-python -m unittest discover -s scripts/tests -v
+python -m unittest discover -s scripts/tests -v     # repository guard
+cd companion && npm test                              # Companion
+cd research && python -m pytest                       # Research
 ```
 
 The tests create temporary Git repositories, stage **dummy** files and check
